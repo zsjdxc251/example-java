@@ -8,6 +8,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ *
+ *    观察 线程状态 （线程休眠和线程没有被运行时状态的不同），什么情况下线程池可以被关闭时线程池完结
+ *
  * @author zhengshijun
  * @version created on 2020/10/31.
  */
