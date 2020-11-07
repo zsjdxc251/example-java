@@ -2,9 +2,12 @@ package org.example.concurrent;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -15,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @version created on 2020/10/31.
  */
 public class ThreadPoolSample {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
 
 		ThreadPoolExecutor threadPoolExecutor =
 				new CustomThreadPool(2, 4, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(3000),
@@ -29,6 +32,17 @@ public class ThreadPoolSample {
 						});
 
 
+		new Thread(()->{
+			while (Thread.currentThread().isAlive()) {
+				System.out.println("threadPoolExecutor.getActiveCount():"+threadPoolExecutor.getActiveCount());
+				System.out.println("Thread.currentThread().isAlive():"+Thread.currentThread().isAlive());
+				try {
+					TimeUnit.MILLISECONDS.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
 		threadPoolExecutor.submit(() -> {
 
 			try {
@@ -50,7 +64,13 @@ public class ThreadPoolSample {
 		});
 
 		threadPoolExecutor.shutdown();
+		Future<String> future = threadPoolExecutor.submit(()->{
+			return "";
+		});
+		System.out.println(future.get(1,TimeUnit.SECONDS));
 		System.out.println("执行了关闭");
+
+
 	}
 
 	static class CustomThreadPool extends ThreadPoolExecutor {
