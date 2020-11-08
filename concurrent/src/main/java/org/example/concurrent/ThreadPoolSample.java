@@ -1,5 +1,7 @@
 package org.example.concurrent;
 
+import org.omg.Messaging.SyncScopeHelper;
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
@@ -31,44 +33,51 @@ public class ThreadPoolSample {
 							}
 						});
 
+		threadPoolExecutor.execute(()->{
 
-		new Thread(()->{
-			while (Thread.currentThread().isAlive()) {
-				System.out.println("threadPoolExecutor.getActiveCount():"+threadPoolExecutor.getActiveCount());
-				System.out.println("Thread.currentThread().isAlive():"+Thread.currentThread().isAlive());
-				try {
-					TimeUnit.MILLISECONDS.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}).start();
-		threadPoolExecutor.submit(() -> {
-
-			try {
-				TimeUnit.SECONDS.sleep(3);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("demo:"+Thread.currentThread().getName());
+			System.out.println("-");
+		});
+		threadPoolExecutor.execute(()->{
+			System.out.println("-");
 		});
 
-		threadPoolExecutor.submit(() -> {
-
-			try {
-				TimeUnit.SECONDS.sleep(3);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("demo:"+Thread.currentThread().getName());
-		});
-
-		threadPoolExecutor.shutdown();
-		Future<String> future = threadPoolExecutor.submit(()->{
-			return "";
-		});
-		System.out.println(future.get(1,TimeUnit.SECONDS));
-		System.out.println("执行了关闭");
+//		new Thread(()->{
+//			while (Thread.currentThread().isAlive()) {
+//				System.out.println("threadPoolExecutor.getActiveCount():"+threadPoolExecutor.getActiveCount());
+//				System.out.println("Thread.currentThread().isAlive():"+Thread.currentThread().isAlive());
+//				try {
+//					TimeUnit.MILLISECONDS.sleep(500);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}).start();
+//		threadPoolExecutor.submit(() -> {
+//
+//			try {
+//				TimeUnit.SECONDS.sleep(3);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			System.out.println("demo:"+Thread.currentThread().getName());
+//		});
+//
+//		threadPoolExecutor.submit(() -> {
+//
+//			try {
+//				TimeUnit.SECONDS.sleep(3);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			System.out.println("demo:"+Thread.currentThread().getName());
+//		});
+//
+//		threadPoolExecutor.shutdown();
+//		Future<String> future = threadPoolExecutor.submit(()->{
+//			return "";
+//		});
+//		System.out.println(future.get(1,TimeUnit.SECONDS));
+//		System.out.println("执行了关闭");
 
 
 	}
