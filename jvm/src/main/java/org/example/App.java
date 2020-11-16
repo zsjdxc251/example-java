@@ -3,6 +3,11 @@ package org.example;
 /**
  * Hello world!
  *
+ * -Xmx50M
+ * -XX:MaxMetaspaceSize=50M
+ *
+ * -XX:+PrintFlagsFinal 打印设置   冒号表达手动设置过
+ *
  */
 public class App
 {
